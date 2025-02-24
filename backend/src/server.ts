@@ -33,16 +33,6 @@ const connectWithRetry = async (retries = 5, delay = 5000) => {
     }
 };
 
-// Function to clear the database
-const clearDatabase = async () => {
-    try {
-        await mongoose.connection.dropDatabase();
-        console.log('Database cleared successfully');
-    } catch (error: unknown) {
-        console.error('Error clearing database:', error);
-        throw error instanceof Error ? error : new Error('Failed to clear database');
-    }
-};
 
 // Function to insert initial data
 const insertInitialCards = async () => {
@@ -63,8 +53,10 @@ const insertInitialCards = async () => {
 const initializeDatabase = async () => {
     try {
         await connectWithRetry();
-        await clearDatabase();
-        await insertInitialCards();
+        const cardCount = await Card.countDocuments();
+        if (cardCount === 0) {
+            await insertInitialCards();
+        }
     } catch (error: unknown) {
         console.error('Database initialization error:', error);
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
