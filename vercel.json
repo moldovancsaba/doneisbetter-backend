@@ -1,0 +1,34 @@
+{
+"version": 2,
+"buildCommand": "cd frontend && npm run build",
+"outputDirectory": "frontend/dist",
+"installCommand": "npm run install:all",
+"builds": [
+    {
+    "src": "frontend/package.json",
+    "use": "@vercel/static"
+    },
+    {
+    "src": "backend/src/**/*.ts",
+    "use": "@vercel/node"
+    }
+],
+"routes": [
+    {
+    "src": "/api/(.*)",
+    "dest": "backend/src/$1"
+    },
+    {
+    "src": "/(.*)",
+    "dest": "frontend/dist/$1"
+    }
+],
+"env": {
+    "NODE_ENV": "production"
+},
+"github": {
+    "enabled": true,
+    "silent": true
+}
+}
+
