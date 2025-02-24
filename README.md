@@ -1,4 +1,113 @@
-# React + TypeScript + Vite
+# DoneIsBetter - Card Management System
+
+A simple, MongoDB-backed card management system built with React, TypeScript, and Express. This project serves as a foundation for card-based applications.
+
+## Project Overview
+
+This project implements a simple yet scalable card management system with:
+- Google-style search input for card creation
+- Real-time card updates
+- MongoDB Atlas backend integration
+- Full TypeScript support
+- Vercel deployment ready
+
+## Tech Stack
+
+### Frontend
+- React with TypeScript
+- Vite build tool
+- @emotion/styled for styling
+- Vercel deployment
+
+### Backend
+- Node.js with TypeScript
+- Express.js
+- MongoDB Atlas
+- CORS enabled API
+
+## Quick Start
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd doneisbetter
+```
+
+2. Install dependencies:
+```bash
+# Frontend
+cd frontend
+npm install
+
+# Backend
+cd ../backend
+npm install
+```
+
+3. Set up environment variables:
+- Create `.env` in backend directory
+- Add MongoDB connection string:
+    ```
+    MONGODB_URI=your_mongodb_connection_string
+    ```
+
+4. Start development servers:
+```bash
+# Backend (from backend directory)
+npm run dev
+
+# Frontend (from frontend directory)
+npm run dev
+```
+
+## Deployment
+
+### Frontend (Vercel)
+1. Create new project on Vercel
+2. Import your repository
+3. Vercel will auto-detect Vite configuration
+4. Deploy
+
+### Backend
+1. Set up MongoDB Atlas:
+- Create cluster
+- Set up database user
+- Add IP access
+- Get connection string
+2. Deploy backend to preferred platform
+3. Update frontend API endpoint
+
+## Development Guidelines
+
+- Keep components simple and focused
+- Use TypeScript types consistently
+- Follow REST API best practices
+- Maintain error handling throughout
+- Document new features
+
+## Troubleshooting
+
+1. MongoDB Connection Issues:
+- Verify connection string
+- Check IP whitelist
+- Verify user credentials
+
+2. Build Issues:
+- Clear node_modules and reinstall
+- Verify TypeScript config
+- Check for lint errors
+
+3. Deployment Issues:
+- Verify environment variables
+- Check build logs
+- Ensure CORS is configured
+
+## Contributing
+
+1. Fork the repository
+2. Create feature branch
+3. Commit changes
+4. Open pull request
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
