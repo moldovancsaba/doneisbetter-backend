@@ -6,9 +6,9 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'https://doneisbetter.com',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: config.cors.origins,
+    methods: config.cors.methods,
+    allowedHeaders: config.cors.allowedHeaders
 }));
 app.use(express.json());
 
