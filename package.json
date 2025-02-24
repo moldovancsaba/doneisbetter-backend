@@ -2,11 +2,20 @@
 "name": "doneisbetter",
 "version": "1.0.0",
 "private": true,
+"type": "module",
 "scripts": {
     "install:all": "cd frontend && npm install && cd ../backend && npm install",
     "build": "cd frontend && npm run build",
     "start": "cd backend && npm start",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run dev"
+},
+"devDependencies": {
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2"
+},
+"dependencies": {
+    "express": "^4.18.2"
 }
 }
