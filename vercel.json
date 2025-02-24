@@ -2,18 +2,22 @@
     "version": 2,
     "builds": [
         {
-            "src": "frontend/**",
+            "src": "frontend/package.json",
             "use": "@vercel/static-build",
             "config": {
-                "distDir": "dist",
-                "buildCommand": "npm install && npm run build"
+                "distDir": "frontend/dist",
+                "buildCommand": "cd frontend && npm install && npm run build"
             }
         }
     ],
-    "rewrites": [
+    "routes": [
         {
-            "source": "/api/(.*)",
-            "destination": "/api/$1"
+            "src": "/api/(.*)",
+            "dest": "/api/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/frontend/dist/$1"
         }
     ]
 }
