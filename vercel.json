@@ -7,5 +7,11 @@
     "source": "/api/(.*)",
     "destination": "/api/$1"
     }
+],
+"builds": [
+    {
+    "src": "frontend/package.json",
+    "use": "@vercel/static-build"
+    }
 ]
 }
