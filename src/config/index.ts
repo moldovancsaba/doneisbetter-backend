@@ -20,7 +20,8 @@ const getAllowedOrigins = (nodeEnv: string): string[] => {
         'https://doneisbetter.com',
         'https://www.doneisbetter.com',
         'https://doneisbetter.vercel.app',
-        'https://backend.doneisbetter.com'
+        'https://backend.doneisbetter.com',
+        'https://doneisbetter-backend.vercel.app'
     ];
     
     // Include local development origins in non-production environments
