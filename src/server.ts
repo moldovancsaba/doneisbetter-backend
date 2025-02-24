@@ -6,9 +6,19 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: config.cors.origins,
+    origin: (origin, callback) => {
+        console.log('Incoming request from origin:', origin);
+        if (!origin || config.cors.origins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.log('Origin not allowed:', origin);
+            console.log('Allowed origins:', config.cors.origins);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: config.cors.methods,
-    allowedHeaders: config.cors.allowedHeaders
+    allowedHeaders: config.cors.allowedHeaders,
+    credentials: true
 }));
 app.use(express.json());
 
