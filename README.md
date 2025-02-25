@@ -1,6 +1,6 @@
 # DoneIsBetter - Card Management System
 
-Last updated: 2025-02-24
+Last updated: 2025-02-25T07:39:26+01:00
 
 A simple, MongoDB-backed card management system built with React, TypeScript, and Express. This project serves as a foundation for card-based applications.
 
