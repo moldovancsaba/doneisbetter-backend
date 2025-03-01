@@ -60,3 +60,7 @@ app.get("/messages", (req, res) => __awaiter(void 0, void 0, void 0, function* (
 }));
 // ✅ Start Server
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// ✅ Default Route
+app.get("/", (req, res) => {
+    res.send("✅ Server is running.");
+});

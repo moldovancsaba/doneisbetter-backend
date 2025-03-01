@@ -50,3 +50,9 @@ app.get("/messages", async (req, res) => {
 
 // ✅ Start Server
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+// ✅ Default Route
+app.get("/", (req, res) => {
+  res.send("✅ Server is running.");
+});
+
