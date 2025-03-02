@@ -3,11 +3,17 @@ import jwt from 'jsonwebtoken';
 import { validateToken, requireAuth, requireAdmin, generateToken } from '../authMiddleware';
 
 // Mock jwt
-jest.mock('jsonwebtoken');
+jest.mock('jsonwebtoken', () => ({
+  verify: jest.fn(),
+  sign: jest.fn()
+}));
 
 describe('Auth Middleware Tests', () => {
-  // Setup common test variables
+  // Mock implementation for jwt functions
+  const mockJwt = jwt as jest.Mocked<typeof jwt>;
+  // Setup common test variables - must match the value in authMiddleware.ts
   const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
+  const jwtSecretBuffer = Buffer.from(jwtSecret, 'utf-8');
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let nextFunction: NextFunction;
@@ -15,6 +21,10 @@ describe('Auth Middleware Tests', () => {
   beforeEach(() => {
     // Reset mocks before each test
     jest.clearAllMocks();
+    
+    // Reset jwt mock implementations
+    (jwt.verify as jest.Mock).mockReset();
+    (jwt.sign as jest.Mock).mockReset();
     
     // Setup mock request and response
     mockRequest = {
@@ -61,12 +71,12 @@ describe('Auth Middleware Tests', () => {
       validateToken(mockRequest as Request, mockResponse as Response, nextFunction);
       
       // Assert
-      expect(jwt.verify).toHaveBeenCalledWith('validToken', jwtSecret);
+      expect(jwt.verify).toHaveBeenCalledWith('validToken', jwtSecretBuffer);
       expect(mockRequest.currentUser).toEqual(testUser);
       expect(nextFunction).toHaveBeenCalled();
     });
 
-    it('should call next() with no currentUser if token verification fails', () => {
+    it('should handle invalid tokens properly', () => {
       // Arrange
       mockRequest.headers = { authorization: 'Bearer invalidToken' };
       (jwt.verify as jest.Mock).mockImplementation(() => {
@@ -77,7 +87,7 @@ describe('Auth Middleware Tests', () => {
       validateToken(mockRequest as Request, mockResponse as Response, nextFunction);
       
       // Assert
-      expect(jwt.verify).toHaveBeenCalledWith('invalidToken', jwtSecret);
+      expect(jwt.verify).toHaveBeenCalledWith('invalidToken', jwtSecretBuffer);
       expect(mockRequest.currentUser).toBeUndefined();
       expect(nextFunction).toHaveBeenCalled();
     });
@@ -162,7 +172,7 @@ describe('Auth Middleware Tests', () => {
       // Assert
       expect(jwt.sign).toHaveBeenCalledWith(
         { id: '123', email: 'test@example.com', role: 'user' },
-        jwtSecret,
+        jwtSecretBuffer,
         { expiresIn: expect.any(String) }
       );
       expect(token).toBe('generated-token');

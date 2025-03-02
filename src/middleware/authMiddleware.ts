@@ -17,8 +17,9 @@ declare global {
 }
 
 // Environment variables - would typically come from config
+// Using Buffer for JWT_SECRET to ensure compatibility with jwt.sign/verify
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY || '1d';
+const TOKEN_EXPIRY: string = process.env.TOKEN_EXPIRY || '1d';
 
 /**
  * Validates a JWT token and attaches the user payload to the request
@@ -28,13 +29,14 @@ export const validateToken = (req: Request, res: Response, next: NextFunction): 
   
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     req.currentUser = undefined;
-    return next();
+    next();
+    return;
   }
   
   const token = authHeader.split(' ')[1];
   
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as UserPayload;
+    const payload = jwt.verify(token, Buffer.from(JWT_SECRET, 'utf-8')) as UserPayload;
     req.currentUser = payload;
     next();
   } catch (error) {
@@ -79,6 +81,7 @@ export const generateToken = (user: { id: string; email: string; role: string })
     role: user.role
   };
   
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: TOKEN_EXPIRY });
+  // Ensure JWT_SECRET is treated as a string
+  return jwt.sign(payload, Buffer.from(JWT_SECRET, 'utf-8'), { expiresIn: TOKEN_EXPIRY });
 };
 
