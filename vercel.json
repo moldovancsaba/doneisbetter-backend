@@ -7,9 +7,23 @@
       "config": {
         "includeFiles": ["dist/**"]
       }
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "src": "/api/public-health",
+      "dest": "/api/public-health.js",
+      "methods": ["GET"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true",
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
     {
       "src": "/api/health",
       "dest": "/api/health.js",
