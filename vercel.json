@@ -20,6 +20,24 @@
       }
     },
     {
+      "src": "/api/v1/health",
+      "dest": "/api/v1/health.js",
+      "methods": ["GET"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true"
+      }
+    },
+    {
+      "src": "/status",
+      "dest": "/public/status.html",
+      "methods": ["GET"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true"
+      }
+    },
+    {
       "src": "/(.*)",
       "dest": "dist/server.js",
       "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],

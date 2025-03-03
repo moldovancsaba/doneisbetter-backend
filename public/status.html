@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .status-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+        }
+        .status-up {
+            background-color: #4CAF50;
+        }
+        .status-down {
+            background-color: #F44336;
+        }
+        .status-checking {
+            background-color: #2196F3;
+        }
+        .status-details {
+            margin-top: 20px;
+        }
+        .refresh-button {
+            padding: 8px 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .refresh-button:hover {
+            background-color: #0b7dda;
+        }
+        .last-checked {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Status</h1>
+    
+    <div class="status-container">
+        <div class="status-heading">
+            <h2>Health Status</h2>
+            <span id="status-badge" class="status-badge status-checking">CHECKING</span>
+        </div>
+        
+        <div class="status-details">
+            <p id="status-message">Checking API status...</p>
+            <p id="response-time"></p>
+        </div>
+        
+        <button class="refresh-button" onclick="checkHealth()">Refresh Status</button>
+        
+        <p class="last-checked">Last checked: <span id="last-checked">-</span></p>
+    </div>
+    
+    <script>
+        // Health endpoint URLs
+        const healthEndpoints = ['/api/health', '/api/v1/health'];
+        
+        // Function to format date
+        function formatDate(date) {
+            return date.toLocaleString();
+        }
+        
+        // Function to check API health
+        function checkHealth() {
+            const startTime = new Date();
+            
+            // Reset UI
+            document.getElementById('status-badge').className = 'status-badge status-checking';
+            document.getElementById('status-badge').textContent = 'CHECKING';
+            document.getElementById('status-message').textContent = 'Checking API status...';
+            document.getElementById('response-time').textContent = '';
+            
+            // Try the first endpoint, fall back to the second if needed
+            tryEndpoint(0, startTime);
+        }
+        
+        // Function to try health endpoints in sequence
+        function tryEndpoint(index, startTime) {
+            if (index >= healthEndpoints.length) {
+                // All endpoints failed
+                const endTime = new Date();
+                document.getElementById('last-checked').textContent = formatDate(endTime);
+                document.getElementById('status-badge').className = 'status-badge status-down';
+                document.getElementById('status-badge').textContent = 'DOWN';
+                document.getElementById('status-message').textContent = 'All health endpoints failed';
+                return;
+            }
+            
+            const currentEndpoint = healthEndpoints[index];
+            
+            fetch(currentEndpoint)
+                .then(response => {
+                    const endTime = new Date();
+                    const responseTime = endTime - startTime;
+                    
+                    document.getElementById('response-time').textContent = `Response time: ${responseTime}ms`;
+                    document.getElementById('last-checked').textContent = formatDate(endTime);
+                    
+                    if (response.ok) {
+                        return response.json().then(data => {
+                            document.getElementById('status-badge').className = 'status-badge status-up';
+                            document.getElementById('status-badge').textContent = 'UP';
+                            document.getElementById('status-message').textContent = 
+                                (data.message || 'API is operational') + 
+                                ` (via ${currentEndpoint})`;
+                        });
+                    } else {
+                        throw new Error(`Status: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.log(`Endpoint ${currentEndpoint} failed: ${error.message}`);
+                    // Try the next endpoint
+                    tryEndpoint(index + 1, startTime);
+                });
+        }
+        
+        // Check health on page load
+        window.onload = checkHealth;
+        
+        // Check health every 60 seconds
+        setInterval(checkHealth, 60000);
+    </script>
+</body>
+</html>
+
