@@ -29,12 +29,6 @@
       "NODE_ENV": "production"
     }
   },
-  "functions": {
-    "dist/server.js": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  },
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ./",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
