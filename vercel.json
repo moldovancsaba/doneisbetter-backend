@@ -12,9 +12,8 @@
   "routes": [
     {
       "src": "/api/health",
-      "dest": "dist/server.js",
+      "dest": "/api/health.js",
       "methods": ["GET"],
-      "continue": true,
       "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true"
