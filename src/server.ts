@@ -58,8 +58,6 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello World');
 });
 
-  message: 'Too many requests from this IP, please try again after 10 minutes'
-});
 
 // Apply rate limiting based on auth status
 app.use((req: Request, res: Response, next: NextFunction) => {
