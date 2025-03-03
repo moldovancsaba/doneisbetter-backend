@@ -21,13 +21,11 @@
       "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
         "Cache-Control": "no-cache, no-store, must-revalidate"
       },
-      "continue": true,
-      "check": false,
-      "auth": false,
-      "status": 200
+      "continue": true
     },
     {
       "src": "/api/health",
