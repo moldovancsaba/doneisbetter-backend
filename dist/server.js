@@ -65,14 +65,6 @@ const authenticatedLimiter = (0, express_rate_limit_1.default)({
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
-// Apply rate limiting based on auth status
-app.use((req, res, next) => {
-    // Simple auth check - would be replaced with actual auth middleware
-    if (req.headers.authorization) {
-        return authenticatedLimiter(req, res, next);
-    }
-    return anonymousLimiter(req, res, next);
-});
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     const startTime = Date.now();
@@ -101,6 +93,14 @@ app.get('/api/health', (req, res) => {
     catch (error) {
         res.status(500).json({ error: 'Health check validation failed' });
     }
+});
+// Apply rate limiting based on auth status
+app.use((req, res, next) => {
+    // Simple auth check - would be replaced with actual auth middleware
+    if (req.headers.authorization) {
+        return authenticatedLimiter(req, res, next);
+    }
+    return anonymousLimiter(req, res, next);
 });
 // Socket.io event handling
 io.on('connection', (socket) => {
