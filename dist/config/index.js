@@ -101,4 +101,3 @@ exports.default = {
     rateLimitConfig,
     abusiveIpConfig,
 };
-//# sourceMappingURL=index.js.map

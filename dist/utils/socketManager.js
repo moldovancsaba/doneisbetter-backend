@@ -215,7 +215,7 @@ class SocketManager {
             const user = this.activeUsers.get(userId);
             return {
                 id: userId,
-                username: user?.username || 'Anonymous'
+                username: (user === null || user === void 0 ? void 0 : user.username) || 'Anonymous'
             };
         });
         this.io.to(room).emit('typing_users', {
@@ -306,4 +306,3 @@ class SocketManager {
 }
 // Export a singleton instance
 exports.socketManager = new SocketManager();
-//# sourceMappingURL=socketManager.js.map

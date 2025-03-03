@@ -105,4 +105,3 @@ MessageSchema.statics.findActiveMessages = async function (limit = 10, skip = 0)
 // Create and export the Message model
 const Message = mongoose_1.default.model('Message', MessageSchema);
 exports.default = Message;
-//# sourceMappingURL=Message.js.map

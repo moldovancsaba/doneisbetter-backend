@@ -7,17 +7,17 @@ export declare const MessageValidationSchema: z.ZodObject<{
     isDeleted: z.ZodDefault<z.ZodBoolean>;
     deletedAt: z.ZodOptional<z.ZodNullable<z.ZodDate>>;
 }, "strip", z.ZodTypeAny, {
-    isDeleted: boolean;
-    content: string;
-    createdBy: string;
-    deletedAt?: Date | null | undefined;
-    updatedBy?: string | undefined;
+    isDeleted?: boolean;
+    deletedAt?: Date;
+    content?: string;
+    createdBy?: string;
+    updatedBy?: string;
 }, {
-    content: string;
-    createdBy: string;
-    isDeleted?: boolean | undefined;
-    deletedAt?: Date | null | undefined;
-    updatedBy?: string | undefined;
+    isDeleted?: boolean;
+    deletedAt?: Date;
+    content?: string;
+    createdBy?: string;
+    updatedBy?: string;
 }>;
 export interface IMessage extends Document {
     content: string;

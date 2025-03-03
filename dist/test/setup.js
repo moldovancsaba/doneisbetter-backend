@@ -66,4 +66,3 @@ const generateAuthToken = (userId) => {
     return `test-token-${userId}`;
 };
 exports.generateAuthToken = generateAuthToken;
-//# sourceMappingURL=setup.js.map

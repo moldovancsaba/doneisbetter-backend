@@ -139,7 +139,7 @@ export const rateLimitMiddleware = (req: Request, res: Response, next: NextFunct
     
     // Apply appropriate rate limiter based on authentication status
     // We check req.user as this is typically where Express-based auth systems store the user
-    if (req.user) {
+    if ((req as any).user) {
       authenticatedLimiter(req, res, next);
     } else {
       anonymousLimiter(req, res, next);

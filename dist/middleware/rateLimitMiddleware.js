@@ -41,6 +41,7 @@ const checkBlockedIP = (req, res, next) => {
 exports.checkBlockedIP = checkBlockedIP;
 // Function to block an abusive IP
 const blockIP = (ip) => {
+    var _a;
     let blockedIP = blockedIPs.get(ip);
     if (blockedIP) {
         // Increment abuse count and extend block duration for repeat offenders
@@ -58,7 +59,7 @@ const blockIP = (ip) => {
             abuse_count: 1
         });
     }
-    console.log(`IP ${ip} blocked until ${blockedIPs.get(ip)?.blockedUntil}`);
+    console.log(`IP ${ip} blocked until ${(_a = blockedIPs.get(ip)) === null || _a === void 0 ? void 0 : _a.blockedUntil}`);
     // In a real application, you would save this to a database
     // For MongoDB implementation:
     // await BlockedIPModel.findOneAndUpdate(
@@ -147,4 +148,3 @@ const createSpecificRateLimiter = (max, windowMs = windowMinutes * 60 * 1000) =>
     });
 };
 exports.createSpecificRateLimiter = createSpecificRateLimiter;
-//# sourceMappingURL=rateLimitMiddleware.js.map

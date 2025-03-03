@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 
 // Types
 interface UserPayload {
@@ -19,7 +19,7 @@ declare global {
 // Environment variables - would typically come from config
 // Using Buffer for JWT_SECRET to ensure compatibility with jwt.sign/verify
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const TOKEN_EXPIRY: string = process.env.TOKEN_EXPIRY || '1d';
+const TOKEN_EXPIRY: string | number = process.env.TOKEN_EXPIRY || '1d';
 
 /**
  * Validates a JWT token and attaches the user payload to the request
@@ -82,6 +82,7 @@ export const generateToken = (user: { id: string; email: string; role: string })
   };
   
   // Ensure JWT_SECRET is treated as a string
-  return jwt.sign(payload, Buffer.from(JWT_SECRET, 'utf-8'), { expiresIn: TOKEN_EXPIRY });
+  // Cast to any to bypass TypeScript's strict type checking on the jwt.sign method
+  return jwt.sign(payload, Buffer.from(JWT_SECRET, 'utf-8') as any, { expiresIn: TOKEN_EXPIRY } as SignOptions);
 };
 

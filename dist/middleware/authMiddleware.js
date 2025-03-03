@@ -64,7 +64,7 @@ const generateToken = (user) => {
         role: user.role
     };
     // Ensure JWT_SECRET is treated as a string
+    // Cast to any to bypass TypeScript's strict type checking on the jwt.sign method
     return jsonwebtoken_1.default.sign(payload, Buffer.from(JWT_SECRET, 'utf-8'), { expiresIn: TOKEN_EXPIRY });
 };
 exports.generateToken = generateToken;
-//# sourceMappingURL=authMiddleware.js.map

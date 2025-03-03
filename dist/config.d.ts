@@ -20,8 +20,8 @@ declare const config: {
         jwtSecret: string;
         jwtExpiresIn: string;
         google: {
-            clientId: string | undefined;
-            clientSecret: string | undefined;
+            clientId: string;
+            clientSecret: string;
         };
     };
     fileUpload: {

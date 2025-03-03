@@ -151,4 +151,3 @@ UserSchema.pre('findOne', function () {
 // Create and export the model
 const User = mongoose_1.default.model('User', UserSchema);
 exports.default = User;
-//# sourceMappingURL=User.js.map

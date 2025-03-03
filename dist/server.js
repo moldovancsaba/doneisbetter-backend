@@ -54,6 +54,13 @@ const anonymousLimiter = (0, express_rate_limit_1.default)({
     legacyHeaders: false,
     message: 'Too many requests from this IP, please try again after 10 minutes'
 });
+const authenticatedLimiter = (0, express_rate_limit_1.default)({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 100, // 100 requests per 10 minutes for authenticated users
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Too many requests from this IP, please try again after 10 minutes'
+});
 // Basic Hello World route
 app.get('/', (req, res) => {
     res.send('Hello World');
@@ -149,10 +156,14 @@ process.on('SIGTERM', () => {
     console.log('SIGTERM received, shutting down gracefully');
     server.close(() => {
         console.log('Server closed');
-        mongoose_1.default.connection.close(false, () => {
+        mongoose_1.default.connection.close()
+            .then(() => {
             console.log('MongoDB connection closed');
             process.exit(0);
+        })
+            .catch(err => {
+            console.error('Error closing MongoDB connection:', err);
+            process.exit(1);
         });
     });
 });
-//# sourceMappingURL=server.js.map
