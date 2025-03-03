@@ -3,86 +3,33 @@
   "builds": [
     {
       "src": "dist/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["dist/**"]
-      }
-    },
-    {
-      "src": "api/**/*.js",
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
+    { "source": "/api/public-health", "destination": "/api/public-health.js" },
+    { "source": "/api/health", "destination": "/api/health.js" },
+    { "source": "/api/v1/health", "destination": "/api/v1/health.js" },
+    { "source": "/status", "destination": "/public/status.html" },
+    { "source": "/(.*)", "destination": "/dist/server.js" }
+  ],
+  "headers": [
     {
-      "src": "/api/public-health",
-      "dest": "/api/public-health.js",
-      "methods": ["GET"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-        "Access-Control-Allow-Methods": "GET, OPTIONS",
-        "Cache-Control": "no-cache, no-store, must-revalidate"
-      },
-      "continue": true
-    },
-    {
-      "src": "/api/health",
-      "dest": "/api/health.js",
-      "methods": ["GET"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-        "Cache-Control": "no-cache, no-store, must-revalidate"
-      },
-      "continue": true
-    },
-    {
-      "src": "/api/v1/health",
-      "dest": "/api/v1/health.js",
-      "methods": ["GET"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true"
-      }
-    },
-    {
-      "src": "/status",
-      "dest": "/public/status.html",
-      "methods": ["GET"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true"
-      }
-    },
-    {
-      "src": "/(.*)",
-      "dest": "dist/server.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-      }
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Credentials", "value": "true" },
+        { "key": "Access-Control-Allow-Headers", "value": "Origin, X-Requested-With, Content-Type, Accept, Authorization" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, PATCH, OPTIONS" },
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
     }
   ],
   "env": {
-    "NODE_ENV": "production",
-    "MONGO_URI": "mongodb+srv://thanperfect:CuW54NNNFKnGQtt6@doneisbetter.49s2z.mongodb.net/doneisbetter?retryWrites=true&w=majority&appName=doneisbetter"
+    "NODE_ENV": "production"
   },
-  "build": {
-    "env": {
-      "NODE_ENV": "production",
-      "MONGO_URI": "mongodb+srv://thanperfect:CuW54NNNFKnGQtt6@doneisbetter.49s2z.mongodb.net/doneisbetter?retryWrites=true&w=majority&appName=doneisbetter"
-    }
-  },
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
-  "devCommand": "npm run dev",
-  "public": true
+  "devCommand": "npm run dev"
 }
-
