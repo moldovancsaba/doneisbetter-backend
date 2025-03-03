@@ -94,6 +94,35 @@ app.get('/api/health', (req, res) => {
         res.status(500).json({ error: 'Health check validation failed' });
     }
 });
+// Public health check endpoint - accessible without authentication
+app.get('/api/public-health', (req, res) => {
+    const startTime = Date.now();
+    // Create health check schema with Zod
+    const HealthCheckSchema = zod_1.z.object({
+        server: zod_1.z.string(),
+        database: zod_1.z.string(),
+        responseTime: zod_1.z.number(),
+        timestamp: zod_1.z.string(),
+        activeUsers: zod_1.z.number(),
+        socketStatus: zod_1.z.string()
+    });
+    const healthData = {
+        server: 'Running',
+        database: mongoose_1.default.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+        responseTime: Date.now() - startTime,
+        timestamp: new Date().toISOString(),
+        activeUsers: io.engine.clientsCount,
+        socketStatus: io.engine.clientsCount > 0 ? 'Connected' : 'No Active Connections'
+    };
+    try {
+        // Validate with Zod
+        const validatedData = HealthCheckSchema.parse(healthData);
+        res.json(validatedData);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Health check validation failed' });
+    }
+});
 // Apply rate limiting based on auth status
 app.use((req, res, next) => {
     // Simple auth check - would be replaced with actual auth middleware

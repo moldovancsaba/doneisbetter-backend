@@ -32,6 +32,38 @@ const io = new Server(server, {
   }
 });
 
+// Public health check endpoint - defined before any middleware to ensure it's accessible without authentication
+app.get('/api/public-health', (req: Request, res: Response) => {
+  const startTime = Date.now();
+  
+  // Create health check schema with Zod
+  const HealthCheckSchema = z.object({
+    server: z.string(),
+    database: z.string(),
+    responseTime: z.number(),
+    timestamp: z.string(),
+    activeUsers: z.number(),
+    socketStatus: z.string()
+  });
+  
+  const healthData = {
+    server: 'Running',
+    database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+    responseTime: Date.now() - startTime,
+    timestamp: new Date().toISOString(),
+    activeUsers: io.engine.clientsCount,
+    socketStatus: io.engine.clientsCount > 0 ? 'Connected' : 'No Active Connections'
+  };
+  
+  try {
+    // Validate with Zod
+    const validatedData = HealthCheckSchema.parse(healthData);
+    res.json(validatedData);
+  } catch (error) {
+    res.status(500).json({ error: 'Health check validation failed' });
+  }
+});
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -98,37 +130,7 @@ app.get('/api/health', (req: Request, res: Response) => {
   }
 });
 
-// Public health check endpoint - accessible without authentication
-app.get('/api/public-health', (req: Request, res: Response) => {
-  const startTime = Date.now();
-  
-  // Create health check schema with Zod
-  const HealthCheckSchema = z.object({
-    server: z.string(),
-    database: z.string(),
-    responseTime: z.number(),
-    timestamp: z.string(),
-    activeUsers: z.number(),
-    socketStatus: z.string()
-  });
-  
-  const healthData = {
-    server: 'Running',
-    database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
-    responseTime: Date.now() - startTime,
-    timestamp: new Date().toISOString(),
-    activeUsers: io.engine.clientsCount,
-    socketStatus: io.engine.clientsCount > 0 ? 'Connected' : 'No Active Connections'
-  };
-  
-  try {
-    // Validate with Zod
-    const validatedData = HealthCheckSchema.parse(healthData);
-    res.json(validatedData);
-  } catch (error) {
-    res.status(500).json({ error: 'Health check validation failed' });
-  }
-});
+// The public health endpoint has been moved before all middleware
 
 // Apply rate limiting based on auth status
 app.use((req: Request, res: Response, next: NextFunction) => {

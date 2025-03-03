@@ -1,3 +1,6 @@
+// api/health.js
+// This is a public health endpoint that returns server status without requiring authentication
+
 module.exports = (req, res) => {
   // Set CORS headers for cross-origin requests
   res.setHeader('Access-Control-Allow-Credentials', 'true');
